@@ -10,16 +10,17 @@ jobs:
     timeout-minutes: 9999
 
     steps:
-      - name: Downloading & Installing Essentials
-        run: |
-          Invoke-WebRequest -Uri "https://example.com/your-batch-script.bat" -OutFile "Downloads.bat"
-          cmd /c Downloads.bat
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run Downloads.bat from local repository
+        run: cmd /c Downloads.bat
 
       - name: Enabling RDP on Windows
         run: |
           Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\' -Name "fDenyTSConnections" -Value 0
           Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
-      
+
       - name: Setting up the RDP connection
         run: |
           mstsc /v:your_rdp_server_ip
